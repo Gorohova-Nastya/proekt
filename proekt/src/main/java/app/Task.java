@@ -92,38 +92,21 @@ public class Task {
         canvas.save();
         // создаём перо
         try (var paint = new Paint()) {
-            /*for (Point p : points) {
+            for (Point p : points) {
                 if (!solved) {
                     paint.setColor(p.getColor());
-                } else {
-                    if (crossed.contains(p))
-                        paint.setColor(CROSSED_COLOR);
-                    else
-                        paint.setColor(SUBTRACTED_COLOR);
                 }
-                // y-координату разворачиваем, потому что у СК окна ось y направлена вниз,
-                // а в классическом представлении - вверх
                 Vector2i windowPos = windowCS.getCoords(p.pos.x, p.pos.y, ownCS);
-                // рисуем точку
-                canvas.drawRect(Rect.makeXYWH(windowPos.x - POINT_SIZE, windowPos.y - POINT_SIZE, POINT_SIZE * 2, POINT_SIZE * 2), paint);} */
-            Polygon q = new Polygon(new Vector2d(100, 100), new Vector2d(200, 400), new Vector2d(400, 500), new Vector2d(500, 200));
-            q.paint(canvas, paint);
+                canvas.drawRect(Rect.makeXYWH(windowPos.x - POINT_SIZE, windowPos.y - POINT_SIZE, POINT_SIZE * 2, POINT_SIZE * 2), paint);}
         }
         canvas.restore();
     }
 
-
-    /**
-     * Добавить точку
-     *
-     * @param pos      положение
-     * @param pointSet множество
-     */
-    public void addPoint(Vector2d pos, Point.PointSet pointSet) {
+    public void addPoint(Vector2d pos) {
         solved = false;
-        Point newPoint = new Point(pos, pointSet);
+        Point newPoint = new Point(pos);
         points.add(newPoint);
-        PanelLog.info("точка " + newPoint + " добавлена в " + newPoint.getSetName());
+        PanelLog.info("точка " + newPoint + " добавлена в пизду");
     }
 
 
@@ -134,7 +117,7 @@ public class Task {
      * @param mouseButton кнопка мыши
      */
     public void click(Vector2i pos, MouseButton mouseButton) {
-        if (lastWindowCS == null) return;
+       /* if (lastWindowCS == null) return;
         // получаем положение на экране
         Vector2d taskPos = ownCS.getCoords(pos, lastWindowCS);
         // если левая кнопка мыши, добавляем в первое множество
@@ -143,7 +126,7 @@ public class Task {
             // если правая, то во второе
         } else if (mouseButton.equals(MouseButton.SECONDARY)) {
             addPoint(taskPos, Point.PointSet.SECOND_SET);
-        }
+        }*/
     }
 
 
@@ -154,16 +137,16 @@ public class Task {
      */
     public void addRandomPoints(int cnt) {
         CoordinateSystem2i addGrid = new CoordinateSystem2i(30, 30);
-
         for (int i = 0; i < cnt; i++) {
             Vector2i gridPos = addGrid.getRandomCoords();
             Vector2d pos = ownCS.getCoords(gridPos, addGrid);
             // сработает примерно в половине случаев
             if (ThreadLocalRandom.current().nextBoolean())
-                addPoint(pos, Point.PointSet.FIRST_SET);
+                addPoint(pos);
             else
-                addPoint(pos, Point.PointSet.SECOND_SET);
+                addPoint(pos);
         }
+
     }
 
     /**
@@ -181,22 +164,6 @@ public class Task {
         // очищаем списки
         crossed.clear();
         single.clear();
-
-        // перебираем пары точек
-        for (int i = 0; i < points.size(); i++) {
-            for (int j = i + 1; j < points.size(); j++) {
-                // сохраняем точки
-                Point a = points.get(i);
-                Point b = points.get(j);
-                // если точки совпадают по положению
-                if (a.pos.equals(b.pos) && !a.pointSet.equals(b.pointSet)) {
-                    if (!crossed.contains(a)) {
-                        crossed.add(a);
-                        crossed.add(b);
-                    }
-                }
-            }
-        }
 
         /// добавляем вс
         for (Point point : points)
