@@ -90,7 +90,6 @@ public class Task {
         lastWindowCS = windowCS;
 
         canvas.save();
-        // создаём перо
         try (var paint = new Paint()) {
             for (Point p : points) {
                 if (!solved) {
@@ -106,16 +105,9 @@ public class Task {
         solved = false;
         Point newPoint = new Point(pos);
         points.add(newPoint);
-        PanelLog.info("точка " + newPoint + " добавлена в пизду");
+        PanelLog.info("точка " + newPoint + " добавлена");
     }
 
-
-    /**
-     * Клик мыши по пространству задачи
-     *
-     * @param pos         положение мыши
-     * @param mouseButton кнопка мыши
-     */
     public void click(Vector2i pos, MouseButton mouseButton) {
         if (lastWindowCS == null) return;
         // получаем положение на экране
@@ -158,16 +150,21 @@ public class Task {
      * Решить задачу
      */
     public void solve() {
-        // очищаем списки
-        crossed.clear();
-        single.clear();
+        for (int i = 0; i < points.size(); i++)
+            for (int j = i; j < points.size(); j++)
+                for (int k = j; k < points.size(); k++)
+                    for (int l = k; l < points.size(); l++)
+                    {
+                        double x1 = points.get(i).pos.x;
+                        double y1 = points.get(i).pos.y;
+                        double x2 = points.get(j).pos.x;
+                        double y2 = points.get(j).pos.y;
+                        double x3 = points.get(k).pos.x;
+                        double y3 = points.get(k).pos.y;
+                        double x4 = points.get(l).pos.x;
+                        double y4 = points.get(l).pos.y;
 
-        /// добавляем вс
-        for (Point point : points)
-            if (!crossed.contains(point))
-                single.add(point);
-
-        // задача решена
+                    }
         solved = true;
     }
 
