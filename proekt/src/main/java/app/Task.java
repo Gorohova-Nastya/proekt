@@ -92,8 +92,8 @@ public class Task {
         canvas.save();
         // создаём перо
         try (var paint = new Paint()) {
-            for (Point p : points) {
-                /*if (!solved) {
+            /*for (Point p : points) {
+                if (!solved) {
                     paint.setColor(p.getColor());
                 } else {
                     if (crossed.contains(p))
@@ -105,11 +105,13 @@ public class Task {
                 // а в классическом представлении - вверх
                 Vector2i windowPos = windowCS.getCoords(p.pos.x, p.pos.y, ownCS);
                 // рисуем точку
-                canvas.drawRect(Rect.makeXYWH(windowPos.x - POINT_SIZE, windowPos.y - POINT_SIZE, POINT_SIZE * 2, POINT_SIZE * 2), paint);*/
-            }
+                canvas.drawRect(Rect.makeXYWH(windowPos.x - POINT_SIZE, windowPos.y - POINT_SIZE, POINT_SIZE * 2, POINT_SIZE * 2), paint);} */
+            Polygon q = new Polygon(new Vector2d(100, 100), new Vector2d(200, 400), new Vector2d(400, 500), new Vector2d(500, 200));
+            q.paint(canvas, paint);
         }
         canvas.restore();
     }
+
 
     /**
      * Добавить точку
