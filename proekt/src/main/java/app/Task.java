@@ -151,13 +151,13 @@ public class Task {
      */
     public void solve() {
         Polygon p = new Polygon(new Vector2d(0, 0), new Vector2d(0, 0), new Vector2d(0, 0), new Vector2d(0, 0));
+        int cmax = -1;
         for (int i = 0; i < points.size(); i++)
             for (int j = i; j < points.size(); j++)
                 for (int k = j; k < points.size(); k++)
                     for (int l = k; l < points.size(); l++)
                     {
                         int c = 0;
-                        int n = 0;
                         double x1 = points.get(i).pos.x;
                         double y1 = points.get(i).pos.y;
                         double x2 = points.get(j).pos.x;
@@ -166,25 +166,38 @@ public class Task {
                         double y3 = points.get(k).pos.y;
                         double x4 = points.get(l).pos.x;
                         double y4 = points.get(l).pos.y;
-                        double x = Math.min(Math.min(x1, x2), Math.min(x3, x4));
-*                       if ((Math.signum((x1 - x4) * (y2 - y1) - (x2 - x1) * (y1 - y4)) == Math.signum((x2 - x4) * (y3 - y2) - (x3 - x2) * (y2 - y4))) && (Math.signum((x1 - x4) * (y2 - y1) - (x2 - x1) * (y1 - y4)) == Math.signum((x3 - x4) * (y1 - y3) - (x1 - x3) * (y3 - y4))))
+                        if (((x1 - x2) * (x3 - x2) + (y1 - y2) * (y3 - y2)) < 0 || ((x1 - x4) * (x3 - x4) + (y1 - y4) * (y3 - y4)) < 0)
                         {
-                            n = 1;
-                        }
-                        if ((Math.signum((x1 - x4) * (y2 - y1) - (x2 - x1) * (y1 - y4)) == Math.signum((x2 - x4) * (y3 - y2) - (x3 - x2) * (y2 - y4))) && (Math.signum((x1 - x4) * (y2 - y1) - (x2 - x1) * (y1 - y4)) == Math.signum((x3 - x4) * (y1 - y3) - (x1 - x3) * (y3 - y4))))
-                        {
-                            n = 1;
+                            int x3t = x3;
+                            x3 = x4;
+                            x4 = x3t;
+                            int y3t = y3;
+                            y3 = y4;
+                            y4 = y3t;
                         }
                         for (int h = 0; h < points.size(); h++)
                         {
                             double x0 = points.get(h).pos.x;
                             double y0 = points.get(h).pos.y;
-                            if ((Math.signum((x1 - x0) * (y2 - y1) - (x2 - x1) * (y1 - y0)) == Math.signum((x2 - x0) * (y3 - y2) - (x3 - x2) * (y2 - y0))) && (Math.signum((x1 - x0) * (y2 - y1) - (x2 - x1) * (y1 - y0)) == Math.signum((x3 - x0) * (y1 - y3) - (x1 - x3) * (y3 - y0))))
+                            int n = 0;
+                            if ((Math.signum((x1 - x0) * (y2 - y1) - (x2 - x1) * (y1 - y0)) == Math.signum((x1 - x0) * (y2 - y1) - (x2 - x1) * (y1 - y0)) && (Math.signum((x1 - x0) * (y2 - y1) - (x2 - x1) * (y1 - y0)) == Math.signum((x3 - x0) * (y1 - y3) - (x1 - x3) * (y3 - y0))))
                             {
-                                c = 1;
+                                n = 1;
                             }
+                            if ((Math.signum((x2 - x0) * (y3 - y2) - (x3 - x2) * (y2 - y0)) == Math.signum((x2 - x0) * (y3 - y2) - (x3 - x2) * (y2 - y0)) && (Math.signum((x2 - x0) * (y3 - y2) - (x3 - x2) * (y2 - y0)) == Math.signum((x4 - x0) * (y2 - y4) - (x2 - x4) * (y4 - y0))))
+                            {
+                                n = 1;
+                            }
+                            if (n)
+                                c++;
                         }
-
+                        if (c > cmax)
+                        {
+                            cmax = c;
+                            p = new Polygon((x1, y1), (x2, y2), (x3, y3), (x4, y4));
+                        }
+                        var paint = new Paint();
+                    p.paint(canvas, paint)
                     }
         solved = true;
     }
